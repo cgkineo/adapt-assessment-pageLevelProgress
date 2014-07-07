@@ -81,11 +81,13 @@ define(function(require) {
 	});
 
 	Handlebars.registerHelper('assessmentPageLevelProgressShowMarking', function() {
-		return _.where(this.components, {_isInteractionsComplete:true}).length / this.components.length == 1 ? 'show-marking' : 'hide-marking';
+		var questions = _.filter(this.components, function(item) { return item._questionWeight != undefined; });
+		return _.where(questions, {_isInteractionsComplete:true}).length / questions.length == 1 ? 'show-marking' : 'hide-marking';
 	});
 
 	Handlebars.registerHelper('assessmentPageLevelProgressMark', function() {
-		return this._isQuestionType && !!Math.floor(this._numberOfCorrectAnswers / this._items.length) ? 'correct' : 'incorrect';
+		if (this._questionWeight != undefined) return !!Math.floor(this._numberOfCorrectAnswers / this._items.length) ? 'correct' : 'incorrect';
+		return '';
 	});
 
 	Adapt.on('articleView:postRender', function(view) {
