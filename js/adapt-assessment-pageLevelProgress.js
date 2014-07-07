@@ -52,8 +52,6 @@ define(function(require) {
 			this.$el.attr('href', '#');
 			this.render();
 			this.updateProgressBar();
-
-			console.log("aplp assessment components: " + this.collection.length);
 		},
 
 		events: {
@@ -83,13 +81,12 @@ define(function(require) {
 	});
 
 	Handlebars.registerHelper('assessmentPageLevelProgressShowMarking', function() {
-		console.log(this.components.length);
 		return _.where(this.components, {_isInteractionsComplete:true}).length / this.components.length == 1 ? 'show-marking' : 'hide-marking';
 	});
 
-	/*Handlebars.registerHelper('assessmentPageLevelProgressMark', function() {
-		return !!Math.floor(this._numberOfCorrectAnswers / this._items.length) ? 'correct' : 'incorrect';
-	});*/
+	Handlebars.registerHelper('assessmentPageLevelProgressMark', function() {
+		return this._isQuestionType && !!Math.floor(this._numberOfCorrectAnswers / this._items.length) ? 'correct' : 'incorrect';
+	});
 
 	Adapt.on('articleView:postRender', function(view) {
         if (view.model.get('_assessment') && view.model.get('_assessment')._isEnabled) {
