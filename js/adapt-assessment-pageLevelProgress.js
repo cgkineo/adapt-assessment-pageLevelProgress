@@ -42,7 +42,15 @@ define(function(require) {
 		render: function() {
 			var data = this.collection.toJSON();
 	        var template = Handlebars.templates["assessmentPageLevelProgress"];
-	        this.$el.html(template({components:data, showCompletion:this.options.showCompletion}));
+	        var opts = {
+	        	components:data,
+	        	showCompletion:this.options.showCompletion,
+	        	incrementalMarking:this.options.incrementalMarking,
+	        	showMarking:this.options.showMarking,
+	        	showProgress:this.options.showProgress
+	        }
+
+	        this.$el.html(template(opts));
 	        return this;
 		}
 
@@ -85,18 +93,30 @@ define(function(require) {
 
 		onProgressClicked: function(event) {
 			event.preventDefault();
-			Adapt.drawer.triggerCustomView(new AssessmentPageLevelProgressView({collection:this.collection, showCompletion:this.options.showCompletion}).$el, false);
+
+			var opts = {
+				collection:this.collection,
+				showCompletion:this.options.showCompletion,
+				incrementalMarking:this.options.incrementalMarking,
+				showMarking:this.options.showMarking,
+				showProgress:this.options.showProgress
+			};
+
+			Adapt.drawer.triggerCustomView(new AssessmentPageLevelProgressView(opts).$el, false);
 		}
 
 	});
 
 	Handlebars.registerHelper('assessmentPageLevelProgressShowMarking', function() {
+		if (!this.showMarking) return 'hide-marking';
+
 		var questions = _.filter(this.components, function(item) { return item._questionWeight != undefined; });
-		return _.where(questions, {_isInteractionsComplete:true}).length / questions.length == 1 ? 'show-marking' : 'hide-marking';
+		
+		return this.incrementalMarking || _.where(questions, {_isInteractionsComplete:true}).length / questions.length == 1 ? 'show-marking' : 'hide-marking';
 	});
 
 	Handlebars.registerHelper('assessmentPageLevelProgressMark', function() {
-		if (this._questionWeight != undefined) return !!Math.floor(this._numberOfCorrectAnswers / this._items.length) ? 'correct' : 'incorrect';
+		if (this._questionWeight != undefined && this._isInteractionsComplete) return !!Math.floor(this._numberOfCorrectAnswers / this._items.length) ? 'correct' : 'incorrect';
 		return '';
 	});
 
@@ -104,8 +124,19 @@ define(function(require) {
         if (view.model.get('assessmentModel') && view.model.get('assessmentModel').get('_isEnabled')) {
         	//console.log("assessment page level progress: " + view.model.get('assessmentModel').get('_isResetOnRevisit') + " - " +  view.model.get('assessmentModel').get('_quizCompleteInSession'));
         	var showCompletion = !view.model.get('assessmentModel').get('_isResetOnRevisit') && view.model.get('assessmentModel').get('_quizCompleteInSession');
+        	var incrementalMarking = view.model.get('assessmentModel').get('_incrementalMarking');
+        	var showMarking = view.model.get('assessmentModel').get('_showMarking');
+        	var showProgress = view.model.get('assessmentModel').get('_showProgress');
         	var c = new Backbone.Collection(view.model.findDescendants('components').where({'_isAvailable': true}));
-            new AssessmentPageLevelProgressNavigationView({collection:c, showCompletion:showCompletion});
+        	var opts = {
+        		collection:c,
+        		showCompletion:showCompletion,
+        		incrementalMarking:incrementalMarking,
+        		showMarking:showMarking,
+        		showProgress:showProgress
+        	};
+
+            new AssessmentPageLevelProgressNavigationView(opts);
         }
     });
 })

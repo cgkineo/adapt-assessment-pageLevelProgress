@@ -20,6 +20,12 @@
             }
         }
     }
+
+    &.show-progress {
+        .assessment-page-level-progress-indicator {
+            display: inline-block;
+        }
+    }
 }
 
 .assessment-page-level-progress-item-title {
@@ -60,7 +66,7 @@
 	width: 16%;
 	height: 10px;
     margin-left:4%;
-    display: inline-block;
+    display: none;
 	border-radius:5px;
 	overflow:hidden;
 	background-color:@inverted-foreground-color;

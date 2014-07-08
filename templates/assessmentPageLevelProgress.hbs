@@ -1,4 +1,4 @@
-<div class="assessment-page-level-progress-inner {{assessmentPageLevelProgressShowMarking}}">
+<div class="assessment-page-level-progress-inner {{assessmentPageLevelProgressShowMarking}} {{#if showProgress}}show-progress{{else}}hide-progress{{/if}}">
     {{#each components}}
     <div class="assessment-page-level-progress-item drawer-item {{assessmentPageLevelProgressMark}}">
         {{#if _isVisible}}
