@@ -15,11 +15,19 @@ define(function(require) {
 
 		initialize: function() {
 			this.listenTo(Adapt, 'remove', this.remove);
+			if(this.options.showCompletion) this.setComponentsStatusByCompletion();
 			this.render();
 		},
 
 		events: {
 			'click .assessment-page-level-progress-item a': 'scrollToPageElement'
+		},
+
+		setComponentsStatusByCompletion: function() {
+			_.each(this.collection.models, function(component){
+				if(component.get('_isComplete') !== component.get('_isInteractionsComplete')) 
+					component.set('_isInteractionsComplete', component.get('_isComplete'));
+			})
 		},
 
 		scrollToPageElement: function(event) {
@@ -34,7 +42,7 @@ define(function(require) {
 		render: function() {
 			var data = this.collection.toJSON();
 	        var template = Handlebars.templates["assessmentPageLevelProgress"];
-	        this.$el.html(template({components:data}));
+	        this.$el.html(template({components:data, showCompletion:this.options.showCompletion}));
 	        return this;
 		}
 
@@ -66,7 +74,9 @@ define(function(require) {
 		},
 
 		updateProgressBar: function() {
-			var componentCompletionRatio = this.collection.where({_isInteractionsComplete:true}).length / this.collection.length;
+			var componentCompletionRatio = (this.options.showCompletion) 
+				? this.collection.where({_isComplete:true}).length / this.collection.length
+				: this.collection.where({_isInteractionsComplete:true}).length / this.collection.length;
 			var percentageOfCompleteComponents = componentCompletionRatio*100;
 
 			this.$('.assessment-page-level-progress-navigation-bar').css('width', percentageOfCompleteComponents+'%');
@@ -75,7 +85,7 @@ define(function(require) {
 
 		onProgressClicked: function(event) {
 			event.preventDefault();
-			Adapt.drawer.triggerCustomView(new AssessmentPageLevelProgressView({collection:this.collection}).$el, false);
+			Adapt.drawer.triggerCustomView(new AssessmentPageLevelProgressView({collection:this.collection, showCompletion:this.options.showCompletion}).$el, false);
 		}
 
 	});
@@ -91,9 +101,11 @@ define(function(require) {
 	});
 
 	Adapt.on('articleView:postRender', function(view) {
-        if (view.model.get('_assessment') && view.model.get('_assessment')._isEnabled) {
+        if (view.model.get('assessmentModel') && view.model.get('assessmentModel').get('_isEnabled')) {
+        	//console.log("assessment page level progress: " + view.model.get('assessmentModel').get('_isResetOnRevisit') + " - " +  view.model.get('assessmentModel').get('_quizCompleteInSession'));
+        	var showCompletion = !view.model.get('assessmentModel').get('_isResetOnRevisit') && view.model.get('assessmentModel').get('_quizCompleteInSession');
         	var c = new Backbone.Collection(view.model.findDescendants('components').where({'_isAvailable': true}));
-            new AssessmentPageLevelProgressNavigationView({collection:c});
+            new AssessmentPageLevelProgressNavigationView({collection:c, showCompletion:showCompletion});
         }
     });
 })
