@@ -127,7 +127,9 @@ define(function(require) {
         	var incrementalMarking = view.model.get('assessmentModel').get('_incrementalMarking');
         	var showMarking = view.model.get('assessmentModel').get('_showMarking');
         	var showProgress = view.model.get('assessmentModel').get('_showProgress');
-        	var c = new Backbone.Collection(view.model.findDescendants('components').where({'_isAvailable': true}));
+        	var c = new Backbone.Collection(view.model.findDescendants('components').filter(function(item) {
+        		return item.get('_isAvailable') && item.get('_assessmentPageLevelProgress') && item.get('_assessmentPageLevelProgress')._isEnabled;
+        	}));
         	var opts = {
         		collection:c,
         		showCompletion:showCompletion,
