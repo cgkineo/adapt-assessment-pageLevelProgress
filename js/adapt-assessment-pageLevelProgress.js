@@ -1,7 +1,7 @@
 /*
 * Assessment Page Level Progress
 * License - http://github.com/adaptlearning/adapt_framework/LICENSE
-* Maintainers - Chris Steele <chris.steele@kineo.com>
+* Maintainers - Chris Steele <chris.steele@kineo.com>, Gavin McMaster <gavin.mcmaster@kineo.com>
 */
 
 define(function(require) {
@@ -123,13 +123,18 @@ define(function(require) {
 	Adapt.on('articleView:postRender', function(view) {
         if (view.model.get('assessmentModel') && view.model.get('assessmentModel').get('_isEnabled')) {
         	//console.log("assessment page level progress: " + view.model.get('assessmentModel').get('_isResetOnRevisit') + " - " +  view.model.get('assessmentModel').get('_quizCompleteInSession'));
-        	var showCompletion = !view.model.get('assessmentModel').get('_isResetOnRevisit') && view.model.get('assessmentModel').get('_quizCompleteInSession');
-        	var incrementalMarking = view.model.get('assessmentModel').get('_incrementalMarking');
-        	var showMarking = view.model.get('assessmentModel').get('_showMarking');
-        	var showProgress = view.model.get('assessmentModel').get('_showProgress');
         	var c = new Backbone.Collection(view.model.findDescendants('components').filter(function(item) {
-        		return item.get('_isAvailable') && item.get('_assessmentPageLevelProgress') && item.get('_assessmentPageLevelProgress')._isEnabled;
+        		return item.get('_isAvailable') && item.get('_pageLevelProgress') && item.get('_pageLevelProgress')._useAssessment;
         	}));
+
+        	if (c.length === 0) return;
+        	
+        	var showCompletion = !view.model.get('assessmentModel').get('_isResetOnRevisit') && view.model.get('assessmentModel').get('_quizCompleteInSession');
+        	var assessmentPageLevelProgress = view.model.get('assessmentModel').get('_assessmentPageLevelProgress');
+        	var incrementalMarking = assessmentPageLevelProgress && assessmentPageLevelProgress._incrementalMarking;
+        	var showMarking = assessmentPageLevelProgress && assessmentPageLevelProgress._showMarking;
+        	var showProgress = assessmentPageLevelProgress && assessmentPageLevelProgress._showProgress;
+        	
         	var opts = {
         		collection:c,
         		showCompletion:showCompletion,
