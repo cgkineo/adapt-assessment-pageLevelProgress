@@ -1,0 +1,65 @@
+// To go on a component
+{
+    "_id":"c-05",
+    "_parentId":"b-05",
+    "_type":"component",
+    "_component":"text",
+    "_classes":"",
+    "_layout":"left",
+    "title":"Our first look at a component",
+    "body":"This component you're reading is a text component. All components take this form of a title and body - except a blank component. However it's important to realise that title and body attributes are not needed. <br><br>Take for instance the media component opposite or below on a smaller device - has no body attribute. Instead of the HTML being rendered Adapt simply doesn't render it. The title attribute is simply a break tag to push the media component level with the opposite component.",
+    "_pageLevelProgress": {
+        "_isEnabled": true,
+        "_useAssessment": true
+    }
+}
+
+// the article assesment object in articles.json
+"_assessment": {
+            "_isEnabled":true,
+            "_isResetOnRevisit": true,
+            "_canShowFeedback": false,
+            "_startBlockCount": 0,
+            "_endBlockCount": 1,
+            "_assessmentPageLevelProgress": {
+                "_incrementalMarking": true,
+                "_showMarking": true,
+                "_showProgress": true
+            },
+            "_banks": {
+                "_isEnabled": false,
+                "_split": "2,2"
+            },
+            "_randomisation": {
+                "_isEnabled": false,
+                "_blockCount": 2
+            },
+            "_isPercentageBased" : true,
+            "_scoreToPass" : 75,
+            "_completionMessage" : {
+                "title" : "You have finished the assessment",
+                "message": "You scored [SCORE] out of [MAXSCORE].  [FEEDBACK]"
+            },
+            "_bands": [
+                {
+                    "_score": 0,
+                    "feedback": "Your score was below 25%. Why not have another try? Below is a list of areas you might want to study first.",
+                    "_showAssociatedLearning": true
+                },
+                {
+                    "_score": 25,
+                    "feedback": "Your score was below 50%. Why not have another try? Below is a list of areas you might want to study first.",
+                    "_showAssociatedLearning": true
+                },
+                {
+                    "_score": 50,
+                    "feedback": "Good effort, but you're score was under 75%. Let's try again? Below is a list of areas you might want to study first.",
+                    "_showAssociatedLearning": true
+                },
+                {
+                    "_score": 75,
+                    "feedback": "Great work. You passed the assessment article quiz.",
+                    "_showAssociatedLearning": false
+                }
+            ]
+        }

@@ -1,0 +1,14 @@
+{
+  "name": "adapt-assessment-pageLevelProgress",
+  "homepage": "https://github.com/adaptlearning/adapt-assessment-pageLevelProgress",
+  "authors": [
+    "Chris Steele <chris.steele@kineo.com>, Gavin McMaster <gavin.mcmaster@kineo.com>"
+  ],
+  "description": "An extension to show a users progress through an asessment article",
+  "main": "/js/adapt-assessment-pageLevelProgress.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-extension"
+  ],
+  "license": "GPLv3"
+}

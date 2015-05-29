@@ -1,0 +1,25 @@
+<div class="assessment-page-level-progress-inner {{assessmentPageLevelProgressShowMarking}} {{#if showProgress}}show-progress{{else}}hide-progress{{/if}}">
+    {{#each components}}
+    <div class="assessment-page-level-progress-item drawer-item {{assessmentPageLevelProgressMark}}">
+        {{#if _isVisible}}
+        <a class="assessment-page-level-progress-item-title clearfix drawer-item-open" href="#" data-assessment-page-level-progress-id="{{_id}}">
+        {{else}}
+        <div class="assessment-page-level-progress-item-title drawer-item-open disabled clearfix">
+        {{/if}}
+        	<h5 class="assessment-page-level-progress-item-title-inner">
+            {{{title}}}
+            </h5>
+            <div class="assessment-page-level-progress-indicator assessment-page-level-progress-indicator-{{#if _isInteractionsComplete}}complete{{else}}incomplete{{/if}}">
+                <div class="assessment-page-level-progress-indicator-bar">
+                </div>
+            </div>
+            <div class="assessment-page-level-progress-item-icon assessment-page-level-progress-correct-icon icon icon-tick"></div>
+            <div class="assessment-page-level-progress-item-icon assessment-page-level-progress-incorrect-icon icon icon-cross"></div>
+        {{#if _isVisible}}
+        </a>
+        {{else}}
+        </div>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
